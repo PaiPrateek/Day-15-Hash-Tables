@@ -39,6 +39,17 @@ namespace HashTables
             string hash2 = hash.Get("8");
             Console.WriteLine("8th Index Value is :" + hash2);
 
+            Console.WriteLine("...............................");
+
+            Console.WriteLine("Removing 10th index value");
+            Console.WriteLine("\n");
+
+            // Remove the element from the Hash Tables
+            hash.Remove("10");
+
+            string hash3 = hash.Get("10");
+            Console.WriteLine("10th index after removal:  " + hash3);
+
         }
     }
 }
