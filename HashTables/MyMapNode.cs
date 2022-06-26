@@ -6,8 +6,76 @@ using System.Threading.Tasks;
 
 namespace HashTables
 {
-    public class MyMapNode
+    public class MyMapNode<K, V>
     {
-        
+        private readonly int size;
+        private readonly LinkedList<KeyValue<K, V>>[] items;
+        public MyMapNode(int size)
+        {
+            this.size = size;
+            this.items = new LinkedList<KeyValue<K, V>>[size];
+        }
+        protected int GetArrayPosition(K Key)
+        {
+            int position = Key.GetHashCode() % size;
+            return Math.Abs(position);
+        }
+        protected LinkedList<KeyValue<K, V>> GetLinkedList(int position)
+        {
+            LinkedList<KeyValue<K, V>> linkedlist = items[position];
+            if (linkedlist == null)
+            {
+                linkedlist = new LinkedList<KeyValue<K, V>>();
+                items[position] = linkedlist;
+            }
+            return linkedlist;
+        }
+        public void Add(K key, V value)
+        {
+            int position = GetArrayPosition(key);
+            LinkedList<KeyValue<K, V>> linkedlist = GetLinkedList(position);
+            KeyValue<K, V> item = new KeyValue<K, V>() { key = key, value = value };
+            linkedlist.AddLast(item);
+        }
+        public V Get(K key)
+        {
+            int position = GetArrayPosition(key);
+            LinkedList<KeyValue<K, V>> linkedlist = GetLinkedList(position);
+            foreach (KeyValue<K, V> item in linkedlist)
+            {
+                if (item.key.Equals(key))
+                {
+                    return item.value;
+                }
+            }
+            return default(V);
+
+        }
+        public void Remove(K Key)
+        {
+            int position = GetArrayPosition(Key);
+            LinkedList<KeyValue<K, V>> linkedlist = GetLinkedList(position);
+            bool itemfound = false;
+            KeyValue<K, V> founditem = default(KeyValue<K, V>);
+            foreach (KeyValue<K, V> item in linkedlist)
+            {
+                if (item.key.Equals(Key))
+                {
+                    itemfound = true;
+                    founditem = item;
+                }
+
+            }
+            if (itemfound)
+            {
+                linkedlist.Remove(founditem);
+            }
+
+        }
+    }
+    public struct KeyValue<K, V>
+    {
+        public K key { get; set; }
+        public V value { get; set; }
     }
 }
